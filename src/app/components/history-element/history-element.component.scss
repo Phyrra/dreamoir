@@ -1,0 +1,107 @@
+@import "~scss/definitions";
+
+$bubble-size: $unit / 2;
+
+$line-dist: $unit * 2;
+$line-size: $border-unit * 2;
+
+:host {
+	position: relative;
+
+	display: flex;
+	align-items: center;
+
+	&:not(.last) {
+		margin-bottom: $unit * 2;
+	}
+
+	.date {
+		color: $border-color;
+		font-weight: bold;
+
+		white-space: nowrap;
+
+		align-self: stretch;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		.bubble {
+			display: inline-block;
+
+			width: $bubble-size;
+			height: $bubble-size;
+			border-radius: $bubble-size;
+
+			border: #{$border-unit * 2} solid $border-color;
+
+			margin-left: $unit / 2;
+		}
+	}
+
+	.line {
+		min-width: $line-dist;
+		height: $line-size;
+
+		background-color: $border-color;
+	}
+
+	.content {
+		border-radius: $border-radius;
+		background-color: $elem-background-color;
+
+		padding: $unit;
+
+		flex-grow: 1;
+
+		.title {
+			font-size: $elem-title-font-size;
+			font-weight: $elem-title-font-weight;
+
+			margin-bottom: $unit;
+		}
+
+		.body {
+			font-size: $elem-font-size;
+			font-weight: $elem-font-weight;
+		}
+	}
+
+	&:not(.first) {
+		.date {
+			position: relative;
+
+			&::before {
+				content: '';
+				
+				position: absolute;
+				right: $bubble-size / 2 + $border-unit;
+				top: 0;
+				bottom: calc(50% + #{$bubble-size / 2});
+	
+				width: $line-size;
+	
+				background-color: $border-color;
+			}
+		}
+	}
+
+	&:not(.last) {
+		.date {
+			position: relative;
+
+			&::after {
+				content: '';
+				
+				position: absolute;
+				right: $bubble-size / 2 + $border-unit;
+				top: calc(50% + #{$bubble-size / 2});
+				bottom: -$unit * 2;
+	
+				width: $line-size;
+	
+				background-color: $border-color;
+			}
+		}
+	}
+}
