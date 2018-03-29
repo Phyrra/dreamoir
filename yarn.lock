@@ -2467,6 +2467,10 @@ follow-redirects@1.0.0:
   dependencies:
     debug "^2.2.0"
 
+font-awesome@^4.7.0:
+  version "4.7.0"
+  resolved "https://registry.yarnpkg.com/font-awesome/-/font-awesome-4.7.0.tgz#8fa8cf0411a1a31afd07b06d2902bb9fc815a133"
+
 for-in@^0.1.3:
   version "0.1.8"
   resolved "https://registry.yarnpkg.com/for-in/-/for-in-0.1.8.tgz#d8773908e31256109952b1fdb9b3fa867d2775e1"
@@ -4017,6 +4021,10 @@ map-visit@^1.0.0:
   dependencies:
     object-visit "^1.0.0"
 
+masa-ui-elements@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/masa-ui-elements/-/masa-ui-elements-0.1.1.tgz#3b4df97cca6a62df3495857a9360fd449c709b22"
+
 md5.js@^1.3.4:
   version "1.3.4"
   resolved "https://registry.yarnpkg.com/md5.js/-/md5.js-1.3.4.tgz#e9bdbde94a20a5ac18b04340fc5764d5b09d901d"
@@ -4286,6 +4294,10 @@ netmask@~1.0.4:
 next-tick@1:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/next-tick/-/next-tick-1.0.0.tgz#ca86d1fe8828169b0120208e3dc8424b9db8342c"
+
+ngx-modal-dialog@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/ngx-modal-dialog/-/ngx-modal-dialog-2.0.1.tgz#bad65cc24a74682fd24d965014e3cae4fdbe5624"
 
 no-case@^2.2.0:
   version "2.3.2"
