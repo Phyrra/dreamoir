@@ -80,6 +80,12 @@
 	border: none;
 	padding: #{$unit / 2} $unit;
 	border-radius: $border-radius / 2;
+
+	&:hover,
+	&:focus {
+		background-color: darken($action-color, 33%);
+		outline: none;
+	}
 }
 .modal-footer .btn + .btn {
 	margin-left: $unit / 2;

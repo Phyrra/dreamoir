@@ -1,4 +1,4 @@
-import { Component, ComponentRef } from '@angular/core';
+import { Component, ComponentRef, ViewChild, AfterViewInit } from '@angular/core';
 import { IModalDialog, IModalDialogButton, IModalDialogOptions } from 'ngx-modal-dialog';
 import { DataService } from '../../services/data.service';
 
@@ -7,7 +7,7 @@ import { DataService } from '../../services/data.service';
   templateUrl: './add-new-dialog.component.html',
   styleUrls: ['./add-new-dialog.component.scss']
 })
-export class AddNewDialogComponent implements IModalDialog {
+export class AddNewDialogComponent implements IModalDialog, AfterViewInit {
 	actionButtons: IModalDialogButton[] = [
 		{ text: 'Cancel', onAction: () => true },
 		{
@@ -21,9 +21,17 @@ export class AddNewDialogComponent implements IModalDialog {
 	title: string;
 	text: string;
 
+	@ViewChild('autofocus') titleElement: any; // MasaInputComponent
+
 	constructor(private data: DataService) {}
 
 	dialogInit(reference: ComponentRef<IModalDialog>, options: Partial<IModalDialogOptions<any>>) {
 		// no processing needed
+	}
+
+	ngAfterViewInit(): void {
+		setTimeout(() => {
+			this.titleElement.focus();
+		}); // Prevent Errors
 	}
 }

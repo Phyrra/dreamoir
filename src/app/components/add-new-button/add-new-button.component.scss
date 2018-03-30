@@ -20,5 +20,10 @@
 		font-size: $button-size / 2;
 
 		margin: $unit;
+
+		&:hover,
+		&:focus {
+			background-color: darken($action-color, 33%);
+		}
 	}
 }
