@@ -54,7 +54,7 @@
 	filter: alpha(opacity=50);
 }
 .modal-header {
-	padding: 16px;
+	padding: $unit;
 	border-bottom: 1px solid #e5e5e5;
 }
 .modal-header .close {
@@ -62,20 +62,27 @@
 }
 .modal-title {
 	margin: 0;
-	line-height: 1.42857143;
 	display: inline-block;
+	font-size: $elem-title-font-size;
 }
 .modal-body {
 	position: relative;
-	padding: 16px;
+	padding: $unit;
 }
 .modal-footer {
-	padding: 16px;
+	padding: $unit;
 	text-align: right;
 	border-top: 1px solid #e5e5e5;
 }
+.modal-footer .btn {
+	background-color: $action-color;
+	color: $action-color-invert;
+	border: none;
+	padding: #{$unit / 2} $unit;
+	border-radius: $border-radius / 2;
+}
 .modal-footer .btn + .btn {
-	margin-left: 5px;
+	margin-left: $unit / 2;
 	margin-bottom: 0;
 }
 .modal-footer .btn-group .btn + .btn {
