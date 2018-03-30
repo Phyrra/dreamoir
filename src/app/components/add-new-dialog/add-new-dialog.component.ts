@@ -1,6 +1,7 @@
 import { Component, ComponentRef, ViewChild, AfterViewInit } from '@angular/core';
 import { IModalDialog, IModalDialogButton, IModalDialogOptions } from 'ngx-modal-dialog';
 import { DataService } from '../../services/data.service';
+import { isBlank } from '../../globals/string.util';
 
 @Component({
   selector: 'app-add-new-dialog',
@@ -13,6 +14,10 @@ export class AddNewDialogComponent implements IModalDialog, AfterViewInit {
 		{
 			text: 'Save',
 			onAction: () => {
+				if (isBlank(this.title) || isBlank(this.text)) {
+					return false;
+				}
+
 				return this.data.saveEntry(this.title, this.text);
 			}
 		}
