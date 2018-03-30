@@ -7,6 +7,8 @@ import { DataService } from './services/data.service';
 import { AddNewButtonComponent } from './components/add-new-button/add-new-button.component';
 import { ModalDialogModule } from 'ngx-modal-dialog';
 import { AddNewDialogComponent } from './components/add-new-dialog/add-new-dialog.component';
+import { MasaUiElementsModule } from 'masa-ui-elements'
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
 	declarations: [
@@ -21,7 +23,9 @@ import { AddNewDialogComponent } from './components/add-new-dialog/add-new-dialo
 	imports: [
 		BrowserModule,
 		CommonModule,
-		ModalDialogModule.forRoot()
+		ModalDialogModule.forRoot(),
+		MasaUiElementsModule,
+		FormsModule
 	],
 	providers: [
 		DataService

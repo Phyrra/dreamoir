@@ -16,6 +16,10 @@ export class AppComponent implements OnInit {
 		this.data.getHistory()
 			.subscribe(data => {
 				this.historyData = data;
+
+				setTimeout(() => {
+					window.scrollTo(0, document.body.scrollHeight);
+				}, 10);
 			});
 	}
 }
