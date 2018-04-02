@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const fs = require('fs');
+const jsonFormat = require('./format-json');
 
 const port = 3000;
 
@@ -31,7 +32,7 @@ app.post('/api/history', (request, response) => {
 
 	console.log(request.body);
 
-	fs.writeFile('./test-data/history.copy.json', JSON.stringify(testData), (err) => {
+	fs.writeFile('./test-data/history.copy.json', jsonFormat(testData), (err) => {
 		if (err) {
 			console.log(err);
 			response.status(500).send(err);
