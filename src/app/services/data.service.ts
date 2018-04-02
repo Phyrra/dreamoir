@@ -1,21 +1,23 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
-import 'rxjs/add/operator/delay';
+import 'rxjs/add/operator/map';
 import { DataPoint } from '../interfaces/DataPoint.interface';
 import * as moment from 'moment';
-
-const testData = require('../../../test-data/history.json')
+import { HttpClient } from '@angular/common/http';
+import { JSON_HEADER, TEXT_HEADER } from '../globals/headers';
 
 @Injectable()
 export class DataService {
 	private listOfEntries: DataPoint[] = [];
 	private stream: EventEmitter<DataPoint[]> = new EventEmitter<DataPoint[]>();
 
+	constructor(private http: HttpClient) {}
+
 	getHistory(): EventEmitter<DataPoint[]> {
-		Observable
-			.of(
-				testData
+		this.http.get<DataPoint[]>('api/history', { headers: JSON_HEADER })
+			.map(data =>
+				data
 					.map(elem => {
 						return {
 							date: moment(elem.date),
@@ -24,7 +26,6 @@ export class DataService {
 						};
 					})
 			)
-			.delay(100)
 			.subscribe(result => {
 				this.listOfEntries = result;
 				this.stream.emit(this.listOfEntries);
@@ -38,10 +39,8 @@ export class DataService {
 	}
 
 	saveEntry(title: string, text: string): Observable<boolean> {
-		return Observable.of(
-			true
-		)
-			.do(() => {
+		return this.http.post('api/history', { title: title, text: text }, { headers: JSON_HEADER, responseType: 'text' })
+			.map(() => {
 				this.listOfEntries.push({
 					date: moment(new Date()),
 					title: title,
@@ -49,6 +48,8 @@ export class DataService {
 				});
 
 				this.stream.emit(this.listOfEntries);
+
+				return true;
 			});
 	}
 }
