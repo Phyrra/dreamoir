@@ -22,7 +22,8 @@ export class DataService {
 						return {
 							date: moment(elem.date),
 							title: elem.title,
-							text: elem.text
+							text: elem.text,
+							mood: elem.mood || 2
 						};
 					})
 			)
@@ -38,13 +39,14 @@ export class DataService {
 		return this.stream;
 	}
 
-	saveEntry(title: string, text: string): Observable<boolean> {
-		return this.http.post('api/history', { title: title, text: text }, { headers: JSON_HEADER, responseType: 'text' })
+	saveEntry(title: string, text: string, mood: number): Observable<boolean> {
+		return this.http.post('api/history', { title: title, text: text, mood: mood }, { headers: JSON_HEADER, responseType: 'text' })
 			.map(() => {
 				this.listOfEntries.push({
 					date: moment(new Date()),
 					title: title,
-					text: text
+					text: text,
+					mood: mood
 				});
 
 				this.stream.emit(this.listOfEntries);

@@ -4,4 +4,5 @@ export interface DataPoint {
 	date: Moment;
 	title: string;
 	text: string;
+	mood: number;
 }

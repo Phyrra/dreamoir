@@ -27,7 +27,8 @@ app.post('/api/history', (request, response) => {
 	testData.push({
 		date: today.getFullYear() + '-' + ('0' + today.getMonth()).slice(-2) + '-' + ('0' + today.getDate()).slice(-2),
 		title: request.body.title,
-		text: request.body.text
+		text: request.body.text,
+		mood: Number(request.body.mood)
 	});
 
 	console.log(request.body);

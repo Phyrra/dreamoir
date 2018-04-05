@@ -18,13 +18,14 @@ export class AddNewDialogComponent implements IModalDialog, AfterViewInit {
 					return false;
 				}
 
-				return this.data.saveEntry(this.title, this.text);
+				return this.data.saveEntry(this.title, this.text, this.mood);
 			}
 		}
 	];
 
 	title: string;
 	text: string;
+	mood: number = 2;
 
 	@ViewChild('autofocus') titleElement: any; // MasaInputComponent
 
@@ -38,5 +39,9 @@ export class AddNewDialogComponent implements IModalDialog, AfterViewInit {
 		setTimeout(() => {
 			this.titleElement.focus();
 		}); // Prevent Errors
+	}
+
+	onSelectMood(mood: number): void {
+		this.mood = mood;
 	}
 }

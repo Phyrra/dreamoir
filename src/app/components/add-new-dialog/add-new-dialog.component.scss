@@ -1,0 +1,21 @@
+@import "~scss/definitions";
+
+:host {
+	.mood {
+		.fa {
+			cursor: pointer;
+			
+			font-size: 36px;
+
+			&:not(:first-child) {
+				margin-left: $unit / 2;
+			}
+
+			color: $inactive-color;
+
+			&.active {
+				color: $action-color;
+			}
+		}
+	}
+}
