@@ -3,6 +3,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const fs = require('fs');
 const jsonFormat = require('./format-json');
+const guid = require('./guid');
 
 const port = 3000;
 
@@ -24,23 +25,30 @@ app.get('/api/history', (request, response) => {
 app.post('/api/history', (request, response) => {
 	const today = new Date();
 
-	testData.push({
+	const newEntry = {
+		id: guid(),
 		date: today.getFullYear() + '-' + ('0' + today.getMonth()).slice(-2) + '-' + ('0' + today.getDate()).slice(-2),
 		title: request.body.title,
 		text: request.body.text,
 		mood: Number(request.body.mood)
-	});
+	};
 
-	console.log(request.body);
+	testData.push(newEntry);
 
 	fs.writeFile('./test-data/history.copy.json', jsonFormat(testData), (err) => {
 		if (err) {
 			console.log(err);
 			response.status(500).send(err);
 		} else {
-			response.send('OK');
+			response.json(newEntry);
 		}
 	});
+});
+
+app.get('/api/history/search', (request, response) => {
+	// TODO
+
+	response.json([]);
 });
 
 app.listen(port, (err) => {

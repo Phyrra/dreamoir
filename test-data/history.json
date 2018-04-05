@@ -1,15 +1,18 @@
 [
 	{
+		"id": "1",
 		"date": "2018-01-01",
 		"title": "New year",
 		"text": "Got a new job. After a long period of searching and whole bunch of interviews, I finally got a new job! I'm not quite sure I want to work, and working in a bank was never my true goal, I have a job and this is good. I hope.",
 		"mood": 3
 	}, {
+		"id": "2",
 		"date": "2018-01-02",
 		"title": "New job",
 		"text": "Started at new job",
 		"mood": 2
 	}, {
+		"id": "3",
 		"date": "2018-01-03",
 		"title": "Bleh",
 		"text": "Work laptop sucks",
