@@ -10,16 +10,21 @@ import { AddNewDialogComponent } from './components/add-new-dialog/add-new-dialo
 import { MasaUiElementsModule } from 'masa-ui-elements'
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { SearchButtonComponent } from './components/search-button/search-button.component';
+import { SearchDialogComponent } from './components/search-dialog/search-dialog.component';
 
 @NgModule({
 	declarations: [
 		AppComponent,
     	HistoryElementComponent,
     	AddNewButtonComponent,
-    	AddNewDialogComponent
+    	AddNewDialogComponent,
+    	SearchButtonComponent,
+    	SearchDialogComponent
 	],
 	entryComponents: [
-		AddNewDialogComponent
+		AddNewDialogComponent,
+		SearchDialogComponent
 	],
 	imports: [
 		BrowserModule,
