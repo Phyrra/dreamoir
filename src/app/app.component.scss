@@ -11,9 +11,28 @@
 
 		padding: $unit;
 
-		app-history-element {
-			&:not(:first-child) {
-				
+		.search-query {
+			padding: #{$unit / 2} $unit;
+			background-color: $action-color;
+			color: $action-color-invert;
+			border-radius: $border-radius;
+
+			margin-bottom: $unit;
+
+			display: flex;
+			justify-content: center;
+
+			.text {
+				flex-grow: 1;
+			}
+
+			.action {
+				margin-left: $unit / 2;
+			}
+
+			.fa {
+				cursor: pointer;
+				color: darken($action-color-invert, 33%);
 			}
 		}
 	}

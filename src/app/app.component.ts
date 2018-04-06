@@ -9,6 +9,8 @@ import { DataPoint } from './interfaces/DataPoint.interface';
 })
 export class AppComponent implements OnInit {
 	historyData: DataPoint[] = [];
+
+	searchQuery: string = null;
 	searchResults: { [key: string]: boolean } = null;
 	
 	constructor(private data: DataService) {}
@@ -24,10 +26,16 @@ export class AppComponent implements OnInit {
 			});
 
 		this.data.searchSubscription()
-			.subscribe(data => {
-				this.searchResults = {};
+			.subscribe(event => {
+				this.searchQuery = event.query;
 
-				data.forEach(point => this.searchResults[point.id] = true);
+				this.searchResults = {};
+				event.data.forEach(point => this.searchResults[point.id] = true);
 			});
+	}
+
+	onResetSearch(): void {
+		this.searchQuery = null;
+		this.searchResults = null;
 	}
 }

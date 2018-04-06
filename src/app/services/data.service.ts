@@ -7,11 +7,16 @@ import * as moment from 'moment';
 import { HttpClient } from '@angular/common/http';
 import { JSON_HEADER, TEXT_HEADER, buildQueryString } from '../globals/http.util';
 
+export interface SearchEvent {
+	query: string;
+	data: DataPoint[];
+}
+
 @Injectable()
 export class DataService {
 	private listOfEntries: DataPoint[] = [];
 	private stream: EventEmitter<DataPoint[]> = new EventEmitter<DataPoint[]>();
-	private search: EventEmitter<DataPoint[]> = new EventEmitter<DataPoint[]>();
+	private search: EventEmitter<SearchEvent> = new EventEmitter<SearchEvent>();
 
 	constructor(private http: HttpClient) {}
 
@@ -63,11 +68,14 @@ export class DataService {
 		return this.http.get<DataPoint[]>(`api/history/search?${buildQueryString(queryObj)}`, { headers: JSON_HEADER });
 	}
 
-	searchSubscription(): EventEmitter<DataPoint[]> {
+	searchSubscription(): EventEmitter<SearchEvent> {
 		return this.search;
 	}
 
-	emitSearchResults(data: DataPoint[]): void {
-		this.search.emit(data);
+	emitSearchResults(query: string, data: DataPoint[]): void {
+		this.search.emit({
+			query: query,
+			data: data
+		});
 	}
 }

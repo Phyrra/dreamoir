@@ -1,4 +1,13 @@
 <div class="content">
+	<ng-container *ngIf="searchQuery">
+		<div class="search-query">
+			<span class="text">{{ searchQuery }}</span>
+			<span class="action" (click)="onResetSearch()">
+				<i class="fa fa-times"></i>
+			</span>
+		</div>
+	</ng-container>
+
 	<ng-container *ngFor="let point of historyData; let i = index">
 		<app-history-element
 			[data]="point"
