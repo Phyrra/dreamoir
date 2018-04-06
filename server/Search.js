@@ -81,7 +81,7 @@ class Search {
 		});
 	}
 
-	_andCombine(allResults, singleResults) {
+	_getCommonElements(allResults, singleResults) {
 		const endResults = {};
 	
 		Object.keys(allResults)
@@ -91,7 +91,18 @@ class Search {
 			.forEach(id => endResults[id] = allResults[id]);
 	
 		return endResults;
-	};
+	}
+
+	_andCombine(singleResults) {
+		const allResults = {};
+
+		singleResults.forEach(result => {
+			Object.keys(result)
+				.forEach(id => allResults[id] = result[id]);
+		});
+
+		return this._getCommonElements(allResults, singleResults);
+	}
 
 	_orCombine(singleResults) {
 		const endResults = {};
@@ -134,17 +145,31 @@ class Search {
 			});
 		});
 	
-		return this._andCombine(possibleResults, valueResults);
+		return this._getCommonElements(possibleResults, valueResults);
+	}
+
+	_findPartial(search) {
+		if (search.hasOwnProperty('condition')) {
+			return this._findSingleQueryResult(search.condition);
+		} else if (search.hasOwnProperty('and')) {
+			return this._andCombine(
+				search.and.map(condition => {
+					return this._findPartial(condition);
+				})
+			);
+		} else if (search.hasOwnProperty('or')) {
+			return this._orCombine(
+				search.or.map(condition => {
+					return this._findPartial(condition);
+				})
+			);
+		}
+
+		throw new Error('Search should have one of [condition, and, or]');
 	}
 
 	find(search) {
-		// Combines all queries with OR
-		// TODO: Allow more sophisticated searches
-		const results = this._orCombine(
-			search.map(query => {
-				return this._findSingleQueryResult(query);
-			})
-		);
+		const results = this._findPartial(search);
 
 		return Object.keys(results)
 			.map(key => results[key]);

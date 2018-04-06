@@ -22,25 +22,26 @@ const data = [
 
 search.addData(data);
 
-console.log(search.find([
-	{
-		index: {
-			key: 'name',
-			type: Type.WORD
-		},
-		value: 'Albert'
-	}
-]));
+const query = {
+	or: [
+		{
+			condition: {
+				index: {
+					key: 'comment',
+					type: Type.TEXT
+				},
+				value: 'cool too'
+			}
+		}, {
+			condition: {
+				index: {
+					key: 'name',
+					type: Type.WORD
+				},
+				value: 'Albert'
+			}
+		}
+	]
+};
 
-console.log('---');
-
-console.log(search.find([
-	{
-		index: {
-			key: 'comment',
-			type: Type.TEXT
-		},
-		value: 'he'
-	}
-]));
-
+console.log(search.find(query));
