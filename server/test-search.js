@@ -1,6 +1,4 @@
-const _search = require('./Search');
-const Search = _search.Search;
-const Type = _search.Type;
+const { Search, Type, Match } = require('./Search');
 
 const search = new Search();
 
@@ -14,32 +12,50 @@ search.addIndex({
 	type: Type.TEXT
 });
 
+search.addIndex({
+	key: 'age',
+	type: Type.NUMBER
+})
+
 const data = [
-	{ name: 'Albert', comment: 'He is cool' },
-	{ name: 'Berta', comment: 'She is cool' },
-	{ name: 'Charlie', comment: 'He is cool too' }
+	{ name: 'Albert', comment: 'He is cool', age: 25 },
+	{ name: 'Berta', comment: 'She is cool', age: 50 },
+	{ name: 'Charlie', comment: 'He is cool too', age: 35 }
 ];
 
 search.addData(data);
 
 const query = {
-	or: [
+	and: [
 		{
 			condition: {
 				index: {
-					key: 'comment',
-					type: Type.TEXT
+					key: 'age',
+					type: Type.NUMBER
 				},
-				value: 'cool too'
+				match: Match.GT,
+				value: 30
 			}
 		}, {
-			condition: {
-				index: {
-					key: 'name',
-					type: Type.WORD
-				},
-				value: 'Albert'
-			}
+			or: [
+				{
+					condition: {
+						index: {
+							key: 'comment',
+							type: Type.TEXT
+						},
+						value: 'cool too'
+					}
+				}, {
+					condition: {
+						index: {
+							key: 'name',
+							type: Type.WORD
+						},
+						value: 'Albert'
+					}
+				}
+			]
 		}
 	]
 };

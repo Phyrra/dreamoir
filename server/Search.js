@@ -2,11 +2,21 @@ var moment = require('moment');
 var _ = require('lodash');
 var guid = require('./guid');
 
+const DATE_FORMAT = 'YYYY-MM-DD';
+
 const Type = {
 	WORD: 'word',
 	TEXT: 'text',
 	NUMBER: 'number',
 	DATE: 'date'
+};
+
+const Match = {
+	EQ: '=',
+	GT: '>',
+	LT: '<',
+	GTE: '>=',
+	LTE: '<='
 };
 
 const transformers = {
@@ -36,7 +46,7 @@ const transformers = {
 			return [];
 		}
 
-		return [moment(value).format('YYYY-MM-DD')];
+		return [moment(value).format(DATE_FORMAT)];
 	}
 };
 
@@ -115,6 +125,97 @@ class Search {
 		return endResults;
 	}
 
+	_extractMatchingResults(query, value, indexedData) {
+		if (query.index.type === Type.WORD || query.index.type === Type.TEXT || query.match === Match.EQ) {
+			return indexedData[value];
+		}
+
+		let partialResults = [];
+
+		switch (query.index.type) {
+			case Type.NUMBER:
+				const numValue = Number(value);
+
+				Object.keys(indexedData)
+					.forEach(key => {
+						const number = Number(key);
+
+						switch (query.match) {
+							case Match.GT:
+								if (number > numValue) {
+									partialResults = partialResults.concat(indexedData[key]);
+								}
+
+								break;
+							case Match.LT:
+								if (number < numValue) {
+									partialResults = partialResults.concat(indexedData[key]);
+								}
+
+								break;
+							case Match.GTE:
+								if (number >= numValue) {
+									partialResults = partialResults.concat(indexedData[key]);
+								}
+
+								break;
+							case Match.LTE:
+								if (number <= numValue) {
+									partialResults = partialResults.concat(indexedData[key]);
+								}
+
+								break;
+							default:
+								throw new Error(`Unknown matcher ${query.match}`);
+						}
+					});
+
+				break;
+			case Type.DATE:
+				const dateValue = moment(value, DATE_FORMAT);
+
+				Object.keys(indexedData)
+					.forEach(key => {
+						const date = moment(key, DATE_FORMAT);
+
+						switch (query.match) {
+							case Match.GT:
+								if (date.isAfter(dateValue, 'day')) {
+									partialResults = partialResults.concat(indexedData[key]);
+								}
+
+								break;
+							case Match.LT:
+								if (date.isBefore(dateValue, 'day')) {
+									partialResults = partialResults.concat(indexedData[key]);
+								}
+
+								break;
+							case Match.GTE:
+								if (date.isSameOrAfter(dateValue, 'day')) {
+									partialResults = partialResults.concat(indexedData[key]);
+								}
+
+								break;
+							case Match.LTE:
+								if (date.isSameOrBefore(dateValue, 'day')) {
+									partialResults = partialResults.concat(indexedData[key]);
+								}
+
+								break;
+							default:
+								throw new Error(`Unknown matcher ${query.match}`);
+						}
+					});
+
+				break;
+			default:
+				throw new Error(`Unknown type ${query.index.type}`);
+		}
+
+		return partialResults;
+	}
+
 	_findSingleQueryResult(query) {
 		if (!transformers.hasOwnProperty(query.index.type)) {
 			throw new Error(`Unknown type ${index.type}`);
@@ -133,12 +234,12 @@ class Search {
 		values.forEach(value => {
 			const temporaryResults = {};
 			valueResults.push(temporaryResults);
-	
-			const partialResults = indexedData[value];
-			if (!partialResults) {
+
+			const partialResults = this._extractMatchingResults(query, value, indexedData);
+			if (!partialResults || partialResults.length === 0) {
 				return;	
 			}
-	
+
 			partialResults.forEach(result => {
 				temporaryResults[result.id] = true;
 				possibleResults[result.id] = result.item;
@@ -178,5 +279,6 @@ class Search {
 
 module.exports = {
 	Search: Search,
-	Type: Type
+	Type: Type,
+	Match: Match
 };
