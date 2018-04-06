@@ -4,10 +4,35 @@ const bodyParser = require('body-parser');
 const fs = require('fs');
 const jsonFormat = require('./format-json');
 const guid = require('./guid');
+const { Search, Type, Match } = require('./Search');
 
 const port = 3000;
 
 const testData = require('../test-data/history.copy.json');
+
+const search = new Search();
+
+search.addIndex({
+	key: 'title',
+	type: Type.TEXT
+});
+
+search.addIndex({
+	key: 'text',
+	type: Type.TEXT
+});
+
+search.addIndex({
+	key: 'date',
+	type: Type.DATE
+});
+
+search.addIndex({
+	key: 'mood',
+	type: Type.NUMBER
+});
+
+search.addData(testData);
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -34,6 +59,7 @@ app.post('/api/history', (request, response) => {
 	};
 
 	testData.push(newEntry);
+	search.addData([ newEntry ]);
 
 	fs.writeFile('./test-data/history.copy.json', jsonFormat(testData), (err) => {
 		if (err) {
@@ -46,9 +72,29 @@ app.post('/api/history', (request, response) => {
 });
 
 app.get('/api/history/search', (request, response) => {
-	// TODO
+	const value = request.query.query;
 
-	response.json([]);
+	response.json(search.find({
+		or: [
+			{
+				condition: {
+					index: {
+						key: 'title',
+						type: Type.TEXT
+					},
+					value: value
+				}
+			}, {
+				condition: {
+					index: {
+						key: 'text',
+						type: Type.TEXT
+					},
+					value: value
+				}
+			}
+		]
+	}));
 });
 
 app.listen(port, (err) => {

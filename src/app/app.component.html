@@ -2,6 +2,7 @@
 	<ng-container *ngFor="let point of historyData; let i = index">
 		<app-history-element
 			[data]="point"
+			[hidden]="searchResults && !searchResults[point.id]"
 			[class.first]="i === 0"
 			[class.last]="i === historyData.length - 1"
 		></app-history-element>

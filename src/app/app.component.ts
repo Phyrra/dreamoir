@@ -8,7 +8,8 @@ import { DataPoint } from './interfaces/DataPoint.interface';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-	historyData: DataPoint[];
+	historyData: DataPoint[] = [];
+	searchResults: { [key: string]: boolean } = null;
 	
 	constructor(private data: DataService) {}
 
@@ -20,6 +21,13 @@ export class AppComponent implements OnInit {
 				setTimeout(() => {
 					window.scrollTo(0, document.body.scrollHeight);
 				}, 10);
+			});
+
+		this.data.searchSubscription()
+			.subscribe(data => {
+				this.searchResults = {};
+
+				data.forEach(point => this.searchResults[point.id] = true);
 			});
 	}
 }

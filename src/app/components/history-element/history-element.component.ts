@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, HostBinding } from '@angular/core';
 import { DataPoint } from '../../interfaces/DataPoint.interface';
 
 @Component({
@@ -8,6 +8,7 @@ import { DataPoint } from '../../interfaces/DataPoint.interface';
 })
 export class HistoryElementComponent {
 	@Input() data: DataPoint;
+	@Input() @HostBinding('class.hidden') hidden: boolean;
 
 	DATE_FORMAT: string = 'DD.MM.YYYY';
 }

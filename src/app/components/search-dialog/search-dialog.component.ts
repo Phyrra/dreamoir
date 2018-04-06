@@ -15,7 +15,7 @@ export class SearchDialogComponent implements IModalDialog, AfterViewInit {
 			onAction: () => {
 				return this.data.searchEntries(this.search)
 					.map(results => {
-						console.log(results);
+						this.data.emitSearchResults(results);
 
 						return true;
 					});

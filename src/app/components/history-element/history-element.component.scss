@@ -104,4 +104,10 @@ $line-size: $border-unit * 2;
 			}
 		}
 	}
+
+	&.hidden {
+		.content {
+			background-color: rgba($elem-background-color, $inactive-alpha);
+		}
+	}
 }

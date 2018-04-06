@@ -11,6 +11,7 @@ import { JSON_HEADER, TEXT_HEADER, buildQueryString } from '../globals/http.util
 export class DataService {
 	private listOfEntries: DataPoint[] = [];
 	private stream: EventEmitter<DataPoint[]> = new EventEmitter<DataPoint[]>();
+	private search: EventEmitter<DataPoint[]> = new EventEmitter<DataPoint[]>();
 
 	constructor(private http: HttpClient) {}
 
@@ -54,11 +55,19 @@ export class DataService {
 			});
 	}
 
-	searchEntries(query: string) {
+	searchEntries(query: string): Observable<DataPoint[]> {
 		const queryObj = {
 			query: query
 		};
 
-		return this.http.get(`api/history/search?${buildQueryString(queryObj)}`, { headers: JSON_HEADER });
+		return this.http.get<DataPoint[]>(`api/history/search?${buildQueryString(queryObj)}`, { headers: JSON_HEADER });
+	}
+
+	searchSubscription(): EventEmitter<DataPoint[]> {
+		return this.search;
+	}
+
+	emitSearchResults(data: DataPoint[]): void {
+		this.search.emit(data);
 	}
 }
