@@ -40,7 +40,7 @@ console.log(search.find([
 			key: 'comment',
 			type: Type.TEXT
 		},
-		value: 'he too'
+		value: 'he'
 	}
 ]));
 
