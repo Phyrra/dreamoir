@@ -32,7 +32,9 @@ const transformers = {
 			return [];
 		}
 
-		return value.trim().toLowerCase().split(/\s+/);
+		return value.trim().toLowerCase()
+			.split(/\s+/)
+			.filter(word => word.length > 0);
 	},
 	[Type.NUMBER]: (value) => {
 		if (value == null) {

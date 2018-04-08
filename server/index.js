@@ -5,6 +5,8 @@ const fs = require('fs');
 const jsonFormat = require('./format-json');
 const guid = require('./guid');
 const { Search, Type, Match } = require('./Search');
+const { analyze } = require('./SearchAnalyze');
+var moment = require('moment');
 
 const port = 3000;
 
@@ -74,27 +76,96 @@ app.post('/api/history', (request, response) => {
 app.get('/api/history/search', (request, response) => {
 	const value = request.query.query;
 
-	response.json(search.find({
-		or: [
-			{
-				condition: {
-					index: {
-						key: 'title',
-						type: Type.TEXT
-					},
-					value: value
-				}
-			}, {
-				condition: {
-					index: {
-						key: 'text',
-						type: Type.TEXT
-					},
-					value: value
-				}
-			}
-		]
-	}));
+	const matchMap = {
+		'>': Match.GT,
+		'>=': Match.GTE,
+		'<': Match.LT,
+		'<=': Match.LTE,
+		'=': Match.EQ
+	};
+
+	const getNumberCondition = (query, field) => {
+		const parts = /([<>]?=?)\s*(.*)/.exec(query);
+
+		return {
+			index: {
+				key: 'mood',
+				type: Type.NUMBER
+			},
+			value: parts[2],
+			match: matchMap[parts[1]]
+		};
+	};
+
+	const getDateCondition = (query, field) => {
+		const parts = /([<>]?=?)\s*(.*)/.exec(query);
+
+		return {
+			index: {
+				key: 'date',
+				type: Type.DATE
+			},
+			value: moment(parts[2], 'DD.MM.YYYY').format('YYYY-MM-DD'),
+			match: matchMap[parts[1]]
+		};
+	};
+
+	const buildSearch = (query) => {
+		const search = {
+			and: []
+		};
+
+		const result = analyze(query);
+
+		if (result.dates) {
+			result.dates.forEach(date => {
+				search.and.push({
+					condition: getDateCondition(date, 'date')
+				});
+			});
+		}
+
+		if (result.numbers) {
+			result.numbers.forEach(number => {
+				search.and.push({
+					condition: getNumberCondition(number, 'mood')
+				});
+			});
+		}
+
+		if (result.words) {
+			const ors = result.words.map(word => {
+				return {
+					or: [{
+						condition: {
+							index: {
+								key: 'title',
+								type: Type.WORD
+							},
+							value: word,
+							match: Match.EQ
+						},
+						condition: {
+							index: {
+								key: 'text',
+								type: Type.WORD
+							},
+							value: word,
+							match: Match.EQ
+						}
+					}]
+				};
+			});
+
+			search.and.push({
+				or: ors
+			});
+		}
+
+		return search;
+	};
+
+	response.json(search.find(buildSearch(value)));
 });
 
 app.listen(port, (err) => {
