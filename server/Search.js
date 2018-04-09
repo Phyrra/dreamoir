@@ -93,27 +93,23 @@ class Search {
 		});
 	}
 
-	_getCommonElements(allResults, singleResults) {
+	_andCombine(singleResults) {
 		const endResults = {};
-	
-		Object.keys(allResults)
+
+		if (singleResults.length === 0) {
+			return endResults;
+		}
+
+		// The set can never be bigger than one of its elements
+		const pivot = singleResults[0];
+
+		Object.keys(pivot)
 			.filter(id => {
 				return singleResults.every(result => result[id]);
 			})
-			.forEach(id => endResults[id] = allResults[id]);
-	
-		return endResults;
-	}
+			.forEach(id => endResults[id] = pivot[id]);
 
-	_andCombine(singleResults) {
-		const allResults = {};
-
-		singleResults.forEach(result => {
-			Object.keys(result)
-				.forEach(id => allResults[id] = result[id]);
-		});
-
-		return this._getCommonElements(allResults, singleResults);
+		return endResults; 
 	}
 
 	_orCombine(singleResults) {
@@ -231,24 +227,23 @@ class Search {
 		const values = transformers[query.index.type](query.value);
 	
 		const valueResults = [];
-		const possibleResults = {};
 	
 		values.forEach(value => {
-			const temporaryResults = {};
-			valueResults.push(temporaryResults);
-
 			const partialResults = this._extractMatchingResults(query, value, indexedData);
 			if (!partialResults || partialResults.length === 0) {
 				return;	
 			}
 
+			const innerResults = {};
+
 			partialResults.forEach(result => {
-				temporaryResults[result.id] = true;
-				possibleResults[result.id] = result.item;
+				innerResults[result.id] = result.item;
 			});
+
+			valueResults.push(innerResults);
 		});
 	
-		return this._getCommonElements(possibleResults, valueResults);
+		return this._andCombine(valueResults);
 	}
 
 	_findPartial(search) {
