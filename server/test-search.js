@@ -1,4 +1,4 @@
-const { Search, Type, Match } = require('./Search');
+const { Search, Type, Match } = require('masa-search');
 
 const search = new Search();
 

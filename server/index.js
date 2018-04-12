@@ -3,8 +3,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const fs = require('fs');
 const jsonFormat = require('./format-json');
-const guid = require('./guid');
-const { Search, Type, Match } = require('./Search');
+const { Search, Type, Match, guid } = require('masa-search');
 const { analyze } = require('./SearchAnalyze');
 var moment = require('moment');
 
