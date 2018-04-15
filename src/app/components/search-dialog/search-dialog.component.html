@@ -1,1 +1,5 @@
-<masa-input [(ngModel)]="search" label="Search" #autofocus></masa-input>
+<masa-input [(ngModel)]="query" label="Search" #autofocus></masa-input>
+
+<div *ngFor="let search of searchHistory" class="search-history-element" (click)="onClickSearch(search)">
+	{{ search }}
+</div>

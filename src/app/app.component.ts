@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from './services/data.service';
 import { DataPoint } from './interfaces/DataPoint.interface';
+import { SearchService } from './services/search.service';
 
 @Component({
   selector: 'app-root',
@@ -13,7 +14,7 @@ export class AppComponent implements OnInit {
 	searchQuery: string = null;
 	searchResults: { [key: string]: boolean } = null;
 	
-	constructor(private data: DataService) {}
+	constructor(private data: DataService, private search: SearchService) {}
 
 	ngOnInit(): void {
 		this.data.getHistory()
@@ -25,7 +26,7 @@ export class AppComponent implements OnInit {
 				}, 10);
 			});
 
-		this.data.searchSubscription()
+		this.search.getResultSubscription()
 			.subscribe(event => {
 				this.searchQuery = event.query;
 

@@ -12,6 +12,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { SearchButtonComponent } from './components/search-button/search-button.component';
 import { SearchDialogComponent } from './components/search-dialog/search-dialog.component';
+import { SearchService } from './services/search.service';
 
 @NgModule({
 	declarations: [
@@ -35,7 +36,8 @@ import { SearchDialogComponent } from './components/search-dialog/search-dialog.
 		HttpClientModule
 	],
 	providers: [
-		DataService
+		DataService,
+		SearchService
 	],
 	bootstrap: [
 		AppComponent

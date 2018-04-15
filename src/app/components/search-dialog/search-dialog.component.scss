@@ -1,0 +1,16 @@
+@import "~scss/definitions";
+
+:host {
+	.search-history-element {
+		cursor: pointer;
+		
+		padding: #{$unit / 2} $unit;
+		background-color: $action-color;
+		color: $action-color-invert;
+		border-radius: $border-radius;
+
+		&:not(:first-child) {
+			margin-top: $unit / 2;
+		}
+	}
+}

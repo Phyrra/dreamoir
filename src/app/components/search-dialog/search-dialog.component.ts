@@ -1,6 +1,7 @@
 import { Component, ComponentRef, ViewChild, AfterViewInit } from '@angular/core';
 import { IModalDialog, IModalDialogButton, IModalDialogOptions } from 'ngx-modal-dialog';
 import { DataService } from '../../services/data.service';
+import { SearchService } from '../../services/search.service';
 
 @Component({
   selector: 'app-search-dialog',
@@ -13,29 +14,40 @@ export class SearchDialogComponent implements IModalDialog, AfterViewInit {
 		{
 			text: 'Search',
 			onAction: () => {
-				return this.data.searchEntries(this.search)
-					.map(results => {
-						this.data.emitSearchResults(this.search, results);
-
-						return true;
-					});
+				return this.search.searchEntries(this.query)
+					.map(() => true);
 			}
 		}
 	];
 
-	search: string;
+	private options: Partial<IModalDialogOptions<any>>;
+
+	query: string;
+	searchHistory: string[];
 
 	@ViewChild('autofocus') titleElement: any; // MasaInputComponent
 
-	constructor(private data: DataService) {}
+	constructor(private search: SearchService) {}
 
 	dialogInit(reference: ComponentRef<IModalDialog>, options: Partial<IModalDialogOptions<any>>) {
-		// no processing needed
+		this.options = options;
+
+		this.search.getSearchSubscription()	
+			.subscribe(searchHistory => {
+				this.searchHistory = searchHistory;
+			});
 	}
 
 	ngAfterViewInit(): void {
 		setTimeout(() => {
 			this.titleElement.focus();
 		}); // Prevent Errors
+	}
+
+	onClickSearch(query: string): void {
+		this.search.searchEntries(query)
+			.subscribe(() => {
+				this.options.closeDialogSubject.next();
+			});
 	}
 }
