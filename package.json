@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
 	"server": "node server/index",
-    "frontend": "ng serve --proxy-config=proxy.conf.json",
+    "client": "ng serve --proxy-config=proxy.conf.json",
     "build": "ng build --prod",
     "lint": "ng lint"
   },
@@ -24,7 +24,7 @@
     "express": "^4.16.3",
     "font-awesome": "^4.7.0",
     "lodash": "^4.17.5",
-    "masa-search": "^0.2.0",
+    "masa-search": "^0.3.0",
     "masa-ui-elements": "^0.1.1",
     "moment": "^2.21.0",
     "ngx-modal-dialog": "^2.0.1",
